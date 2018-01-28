@@ -45,28 +45,48 @@ public class RuleExample {
         List<IAction<MyInput, BigDecimal>> actions = Arrays.asList(action1, action2);
 
         //MyInput input = new MyInput();
-        Map<String, Person> input = new HashMap<>();
-        Person p1 = new Person("ant", 16);
+        Map<String, Object> input = new HashMap<>();
+        Map<String, Object> id = new HashMap<>();
+        id.put("id", "Smith");
+        Person p1 = new Person("Jim", 16);
         Person p2 = new Person("clare", 19);
         //input.setP1(p1);
         //input.setP2(p2);
         input.put("p1", p1);
         input.put("p2", p2);
+        input.put("role", Arrays.asList(id));
 
         try {
             //BigDecimal price = e.executeBestAction(input, actions.stream());
             //System.out.println(price);
-            System.out.println(e.getBestOutcome(input));
+            System.out.println(e.getBestOutcome("ch.maxant.produkte", input));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private static Stream<Rule> getStreamOfRules() {
-        Rule rule1 = new Rule("R1", "input.p1.name == \"ant\" && input.p1.age == 16", "outcome1", 0,
+        Rule rule1 = new Rule("R1",
+            "eval2 = def (input, values) { "
+            + "System.out.println(input); "
+            + "System.out.println(values); return true; }; "
+            + "eval1 = def (input, values) { "
+            + "for(item : input) { "
+            + "System.out.println(item.?id);"
+            + "for(value : values) { "
+            + "System.out.println(value);"
+            + "System.out.println(value == item.?id);"
+            + "if (value == item.?id) { return true; } } } return false; }; "
+            + "1 == 1 && eval1(input.?role, [\"Jim\", \"Bob\", \"Smith\"]) && 2 == 2",
+            "outcome1", 2, "ch.maxant.produkte", "Spezi Regel für Familie Kutschera");
+        Rule rule2 = new Rule("R2",
+            "eval2 = def (input, values) { "
+            + "System.out.println(input); "
+            + "System.out.println(values); return true; }; "
+            + "input.?p2.name == 'clare' && eval2(input.?p2.name, []) && input.p2.age == 18", "outcome2", 1, "ch.maxant.produkte", "Default Regel");
+        Rule rule3 = new Rule("R3", "1 == 1", "outcome3", 0,
             "ch.maxant.produkte", "Spezi Regel für Familie Kutschera");
-        Rule rule2 = new Rule("R2", "input.p2.name == \"clare\" && input.p2.age == 19", "outcome2", 1, "ch.maxant.produkte", "Default Regel");
-        List<Rule> rules = Arrays.asList(rule1, rule2);
+        List<Rule> rules = Arrays.asList(rule1, rule2, rule3);
         return rules.stream();
     }
 

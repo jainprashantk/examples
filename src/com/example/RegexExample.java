@@ -16,6 +16,7 @@
 
 package com.example;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -24,9 +25,15 @@ import java.util.regex.Pattern;
 public class RegexExample {
 
     public static void main(String[] args) {
+        final String PHONE = "^(\\(?\\+?[0-9]*\\)?)?[0-9\\- \\(\\)]*$";
+        String phone = "+14160000001";
+        String str = "searchstring";
         Pattern p = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         System.out.println("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         System.out.println(p.pattern());
+        Pattern ph = Pattern.compile(Pattern.quote(phone));
+        Matcher m = ph.matcher(phone);
+        System.out.println(m.matches());
     }
 
 }

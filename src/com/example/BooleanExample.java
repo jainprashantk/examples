@@ -16,10 +16,14 @@
 
 package com.example;
 
+import java.util.Locale;
+
 /**
  * @author prja1015
  */
 public class BooleanExample {
+
+    private static boolean value;
 
     public BooleanExample() {
     }
@@ -27,6 +31,9 @@ public class BooleanExample {
     public static void main(String[] args) {
         System.out.println(Boolean.TRUE.toString().equalsIgnoreCase("true"));
         System.out.println(new ValueMapping<Boolean>().getToValue());
+        System.out.println(value);
+        System.out.println(Locale.US.toString());
+        System.out.println(Locale.US.toLanguageTag());
     }
 
 }

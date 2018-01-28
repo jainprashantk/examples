@@ -16,40 +16,37 @@
 
 package com.example;
 
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import org.mvel2.MVEL;
 
-import static java.time.Instant.now;
-import static java.time.temporal.ChronoUnit.DAYS;
+import java.util.*;
 
 /**
  * @author prja1015
  */
-public class DateExample {
-
-    public DateExample() {
-    }
+public class MVELExample {
 
     public static void main(String[] args) {
-        final String time = "1990-01-01T00:00:00.000Z";
-        System.out.println(Instant.parse(time).truncatedTo(ChronoUnit.DAYS).plus(23, ChronoUnit.HOURS)
-            .plus(59, ChronoUnit.MINUTES).plusSeconds(59).plusMillis(999L));
-        System.out.println(Instant.now().minus(5, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS).minusMillis(1).toString());
-        System.out.println(Date.from(Instant.parse(time)).before(new Date()));
-        System.out.println(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
-        System.out.println(Instant
-            .parse(DateTimeFormatter.ISO_LOCAL_DATE.format(DateTimeFormatter.ofPattern("dd.MM.yyyy").parse("04.08.2017"))
-                + "T00:00:00Z"));
-        System.out.println(Instant.parse("2017-04-01" + "T00:00:00Z"));
-        System.out.println(new Date().toInstant().truncatedTo(ChronoUnit.DAYS).minusSeconds(1));
-        System.out.println((int) DAYS.between(Instant.parse("2017-09-30T00:00:00Z"), now()));
-        System.out.println(Instant.EPOCH);
-        System.out.println(Date.from(Instant.parse(time)).before(Date.from(Instant.now().minusSeconds(60))));
-        System.out.println(new Date(0));
-        System.out.println(Instant.parse(time).toString());
+        String operator = ">";
+        List<Double> computedValue = new ArrayList<Double>();
+        computedValue.add(new Double(50.0));
+        computedValue.add(new Double(97.9));
+        computedValue.add(new Double(68.9));
+
+        Map<String, Object> input = new HashMap<String, Object>();
+        input.put("actual_value", new Double(55.9));
+        input.put("computed_value", computedValue);
+        List output = null;
+
+        if (operator.equals(">")) {
+            output = (List) MVEL.eval("($ in computed_value if $ > actual_value)", input);
+        } else {
+            output = (List) MVEL.eval("($ in computed_value if $ < actual_value)", input);
+        }
+        System.out.println(output);
+        Map vars = new HashMap();
+        //vars.put("date", Instant.now().plus(3, ChronoUnit.DAYS).toString());
+        vars.put("addToDate", "3");
+        System.out.println(MVEL.eval("java.time.Instant.now().plus(addToDate, java.time.temporal.ChronoUnit.DAYS).toString()", vars));
     }
 
 }

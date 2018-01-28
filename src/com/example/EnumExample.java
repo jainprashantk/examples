@@ -16,42 +16,28 @@
 
 package com.example;
 
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-
-import static java.time.Instant.now;
-import static java.time.temporal.ChronoUnit.DAYS;
+import java.util.Optional;
 
 /**
  * @author prja1015
  */
-public class DateExample {
+public class EnumExample {
 
-    public DateExample() {
+    public static enum CarBrands {
+        AUDI, BMW, SUZUKI, TOYOTA
     }
 
     public static void main(String[] args) {
-        final String time = "1990-01-01T00:00:00.000Z";
-        System.out.println(Instant.parse(time).truncatedTo(ChronoUnit.DAYS).plus(23, ChronoUnit.HOURS)
-            .plus(59, ChronoUnit.MINUTES).plusSeconds(59).plusMillis(999L));
-        System.out.println(Instant.now().minus(5, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS).minusMillis(1).toString());
-        System.out.println(Date.from(Instant.parse(time)).before(new Date()));
-        System.out.println(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
-        System.out.println(Instant
-            .parse(DateTimeFormatter.ISO_LOCAL_DATE.format(DateTimeFormatter.ofPattern("dd.MM.yyyy").parse("04.08.2017"))
-                + "T00:00:00Z"));
-        System.out.println(Instant.parse("2017-04-01" + "T00:00:00Z"));
-        System.out.println(new Date().toInstant().truncatedTo(ChronoUnit.DAYS).minusSeconds(1));
-        System.out.println((int) DAYS.between(Instant.parse("2017-09-30T00:00:00Z"), now()));
-        System.out.println(Instant.EPOCH);
-        System.out.println(Date.from(Instant.parse(time)).before(Date.from(Instant.now().minusSeconds(60))));
-        System.out.println(new Date(0));
-        System.out.println(Instant.parse(time).toString());
+        System.out.println(CarBrands.AUDI.name());
+        System.out.println(CarBrands.BMW.toString());
+        System.out.println(Optional.ofNullable("first".length())
+            .orElse(Optional.ofNullable(getString().length()).orElse("second".length())));
+        System.out.println((double)1.2);
     }
 
+    private static String getString() {
+        return "null";
+    }
 }
 
 /*

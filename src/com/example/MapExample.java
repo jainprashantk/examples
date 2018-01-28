@@ -38,6 +38,14 @@ public class MapExample {
             row.put(columnNumber++, columnValue);
         }
         System.out.println(row);
+        row.computeIfPresent(0, (key, oldValue) -> "idk");
+        row.computeIfPresent(1, (key, oldValue) -> "tldr");
+        System.out.println(row);
+        final Map<String, Object> column = new ConcurrentHashMap<>();
+        System.out.println((Map) column.get("first"));
+        final Map<String, Object> dueDateMap = (Map<String, Object>)null;
+        if(dueDateMap instanceof Map)
+            System.out.println("works");
     }
 
 }

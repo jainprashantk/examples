@@ -16,6 +16,8 @@
 
 package com.example;
 
+import java.util.Locale;
+
 /**
  * @author prja1015
  */
@@ -26,6 +28,15 @@ public class StringExample {
 
     public static void main(String[] args) {
         System.out.println("contacts.from.salesforce.july.2017.csv".replace(".", "-"));
+//        for(String s : Locale.getISOLanguages())
+//            System.out.println(s);
+//        for(Locale l : Locale.getAvailableLocales()) {
+        // en-US
+        Locale l = new Locale("en", "US");
+            System.out.println(l);
+            System.out.println(l.getDisplayName());
+//            break;
+//        }
     }
 
 }
