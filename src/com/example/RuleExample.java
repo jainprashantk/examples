@@ -17,6 +17,7 @@
 package com.example;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -49,18 +50,24 @@ public class RuleExample {
         Map<String, Object> id = new HashMap<>();
         id.put("id", "Smith");
         Person p1 = new Person("Jim", 16);
-        Person p2 = new Person("clare", 19);
+        Person p2 = new Person("John", 18);
         //input.setP1(p1);
         //input.setP2(p2);
-        input.put("p1", p1);
+        //input.put("p1", p1);
         input.put("p2", p2);
-        input.put("role", Arrays.asList(id));
+        input.put("role", Arrays.asList("admin", "root"));
+        input.put("date", Instant.parse("2019-09-30T00:00:00Z"));
+        input.put("pattern", ".*Searching.*");
+        input.put("match", "iamsearchingstringinthistext");
+        input.put("option", 2);
 
         try {
             //BigDecimal price = e.executeBestAction(input, actions.stream());
             //System.out.println(price);
             System.out.println(e.getBestOutcome("ch.maxant.produkte", input));
+            //System.out.println(e.getMatchingRules("ch.maxant.produkte", input));
         } catch (Exception ex) {
+            System.out.println(ex.getClass());
             ex.printStackTrace();
         }
     }
@@ -77,15 +84,18 @@ public class RuleExample {
             + "System.out.println(value);"
             + "System.out.println(value == item.?id);"
             + "if (value == item.?id) { return true; } } } return false; }; "
-            + "1 == 1 && eval1(input.?role, [\"Jim\", \"Bob\", \"Smith\"]) && 2 == 2",
+            + "1 != 1 && eval1(input.?role, [\"Jim\", \"Bob\", \"Smith\"]) && 2 == 2",
             "outcome1", 2, "ch.maxant.produkte", "Spezi Regel für Familie Kutschera");
         Rule rule2 = new Rule("R2",
-            "eval2 = def (input, values) { "
-            + "System.out.println(input); "
-            + "System.out.println(values); return true; }; "
-            + "input.?p2.name == 'clare' && eval2(input.?p2.name, []) && input.p2.age == 18", "outcome2", 1, "ch.maxant.produkte", "Default Regel");
-        Rule rule3 = new Rule("R3", "1 == 1", "outcome3", 0,
-            "ch.maxant.produkte", "Spezi Regel für Familie Kutschera");
+            "eval2 = def (input, value) { "
+            + "foreach (key : input) { "
+            + "System.out.println(key != empty && key == value); }"
+            + "System.out.println(value); return true; }; "
+            + "eval2(input.role, 'sysadmin') && input.p2.age == 18", "outcome2", 0, "ch.maxant.produkte", "Default Regel");
+        Rule rule3 = new Rule("R3",
+            "java.util.regex.Pattern.compile(input.pattern, input.option).matcher(input.match).matches() && "
+                + "input.date > java.time.Instant.parse(" + "'2018-09-30T00:00:00Z'" + ")",
+            "outcome3", 1, "ch.maxant.produkte", "Spezi Regel für Familie Kutschera");
         List<Rule> rules = Arrays.asList(rule1, rule2, rule3);
         return rules.stream();
     }

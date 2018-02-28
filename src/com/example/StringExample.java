@@ -16,6 +16,9 @@
 
 package com.example;
 
+import java.util.*;
+import java.util.stream.Stream;
+
 /**
  * @author prja1015
  */
@@ -26,6 +29,16 @@ public class StringExample {
 
     public static void main(String[] args) {
         System.out.println("contacts.from.salesforce.july.2017.csv".replace(".", "-"));
+
+        List<Date> valueList = new ArrayList<>();
+//        valueList.add(Date.from(Instant.now().minusSeconds(300005000000L)));
+//        valueList.add(Date.from(Instant.now().minusSeconds(300000000000L)));
+//        valueList.add(new Date());
+        Stream<Date> stream = valueList.stream();
+        //System.out.println(stream.skip(count - 1).findFirst().get());
+        Date lastDate = stream.skip(valueList.size() - 1).findFirst().get();
+        lastDate.setHours(4);
+        System.out.println(valueList);
     }
 
 }

@@ -26,13 +26,14 @@ public class RegexExample {
 
     public static void main(String[] args) {
         final String PHONE = "^(\\(?\\+?[0-9]*\\)?)?[0-9\\- \\(\\)]*$";
-        String phone = "+14160000001";
-        String str = "searchstring";
-        Pattern p = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        final String phone = "+14160000001";
+        final String matchStr = "iamsearchingstringinthistext";
+        final String pattern = ".*searchstring.*";
+        final Pattern p = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         System.out.println("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         System.out.println(p.pattern());
-        Pattern ph = Pattern.compile(Pattern.quote(phone));
-        Matcher m = ph.matcher(phone);
+        final Pattern ph = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        final Matcher m = ph.matcher(matchStr);
         System.out.println(m.matches());
     }
 

@@ -16,8 +16,7 @@
 
 package com.example;
 
-import java.time.Instant;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -48,8 +47,9 @@ public class DateExample {
         System.out.println((int) DAYS.between(Instant.parse("2017-09-30T00:00:00Z"), now()));
         System.out.println(Instant.EPOCH);
         System.out.println(Date.from(Instant.parse(time)).before(Date.from(Instant.now().minusSeconds(60))));
-        System.out.println(new Date(0));
+        System.out.println(new Date().toInstant());
         System.out.println(Instant.parse(time).toString());
+        System.out.println(ZoneId.getAvailableZoneIds());
     }
 
 }
