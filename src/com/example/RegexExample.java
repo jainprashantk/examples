@@ -28,7 +28,7 @@ public class RegexExample {
         final String PHONE = "^(\\(?\\+?[0-9]*\\)?)?[0-9\\- \\(\\)]*$";
         final String phone = "+14160000001";
         final String matchStr = "iamsearchingstringinthistext";
-        final String pattern = ".*searchstring.*";
+        final String pattern = ".*@netcracker\\.com.*";
         final Pattern p = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         System.out.println("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         System.out.println(p.pattern());

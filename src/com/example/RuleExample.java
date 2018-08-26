@@ -17,7 +17,6 @@
 package com.example;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -53,13 +52,14 @@ public class RuleExample {
         Person p2 = new Person("John", 18);
         //input.setP1(p1);
         //input.setP2(p2);
-        //input.put("p1", p1);
+//        input.put("p1", p1);
         input.put("p2", p2);
         input.put("role", Arrays.asList("admin", "root"));
-        input.put("date", Instant.parse("2019-09-30T00:00:00Z"));
-        input.put("pattern", ".*Searching.*");
-        input.put("match", "iamsearchingstringinthistext");
+//        input.put("date", Instant.parse("2019-09-30T00:00:00Z").toString());
+        input.put("pattern", ".*@netcracker\\.com.*");
+        input.put("match", "iamsearchingstringinthistext@netcracker.com");
         input.put("option", 2);
+        input.put("new_value", id);
 
         try {
             //BigDecimal price = e.executeBestAction(input, actions.stream());
@@ -74,27 +74,31 @@ public class RuleExample {
 
     private static Stream<Rule> getStreamOfRules() {
         Rule rule1 = new Rule("R1",
-            "eval2 = def (input, values) { "
+            "eval3 = def (input) { "
+            + "return input == null ? [] : input }; "
+            + "eval2 = def (input, values) { "
             + "System.out.println(input); "
             + "System.out.println(values); return true; }; "
             + "eval1 = def (input, values) { "
-            + "for(item : input) { "
+            + "foreach (item : input) { "
             + "System.out.println(item.?id);"
             + "for(value : values) { "
             + "System.out.println(value);"
             + "System.out.println(value == item.?id);"
             + "if (value == item.?id) { return true; } } } return false; }; "
-            + "1 != 1 && eval1(input.?role, [\"Jim\", \"Bob\", \"Smith\"]) && 2 == 2",
+            + "1 == 1 && eval2(eval3(input.?role), [\"Jim\", \"Bob\", \"Smith\"]) && 2 == 2",
             "outcome1", 2, "ch.maxant.produkte", "Spezi Regel für Familie Kutschera");
         Rule rule2 = new Rule("R2",
-            "eval2 = def (input, value) { "
+            "eval3 = def (input) { "
+            + "return input == null ? [] : input }; "
+            + "eval2 = def (input, value) { "
             + "foreach (key : input) { "
             + "System.out.println(key != empty && key == value); }"
             + "System.out.println(value); return true; }; "
-            + "eval2(input.role, 'sysadmin') && input.p2.age == 18", "outcome2", 0, "ch.maxant.produkte", "Default Regel");
+            + "(eval2(eval3(input.?role), 'sysadmin') || input.?p2.?age == 18) && input.?new_value.?id == 'Smith'", "outcome2", 0, "ch.maxant.produkte", "Default Regel");
         Rule rule3 = new Rule("R3",
-            "java.util.regex.Pattern.compile(input.pattern, input.option).matcher(input.match).matches() && "
-                + "input.date > java.time.Instant.parse(" + "'2018-09-30T00:00:00Z'" + ")",
+            "java.util.regex.Pattern.compile(\".*@netcracker\\\\.com.*\", input.option).matcher(input.?match).matches() && "
+                + "input.?date != null && java.time.Instant.parse(input.?date) > java.time.Instant.parse(" + "'2018-09-30T00:00:00Z'" + ")",
             "outcome3", 1, "ch.maxant.produkte", "Spezi Regel für Familie Kutschera");
         List<Rule> rules = Arrays.asList(rule1, rule2, rule3);
         return rules.stream();

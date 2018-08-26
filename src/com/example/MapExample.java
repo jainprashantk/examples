@@ -18,6 +18,11 @@ package com.example;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author prja1015
@@ -46,6 +51,60 @@ public class MapExample {
         final Map<String, Object> dueDateMap = (Map<String, Object>)null;
         if(dueDateMap instanceof Map)
             System.out.println("works");
+        Collection dueDateColl = new ArrayList<>();
+        dueDateColl.add(null);
+        System.out.println(dueDateColl.stream().map(e -> e).collect(Collectors.toSet()));
+        getOpportunitiesWithAccountDetails();
+        getStreaming();
+        finallyTest();
+    }
+
+    public static List<Map<String, Object>> getOpportunitiesWithAccountDetails() {
+        final List<Map<String, Object>> opportunityResponseList = new ArrayList<>();
+        final Map<String, Object> oppoResp = new HashMap<>();
+        final Map<String, Object> oppoValue = new HashMap<>();
+        oppoResp.put("VALUE", oppoValue);
+        opportunityResponseList.add(oppoResp);
+        final List<Map<String, Object>> opportunitiesWithAccountDetails = new ArrayList<>();
+        opportunityResponseList.forEach(opportunityResponse -> {
+            final Map<String, Object> opportunity = (Map<String, Object>) opportunityResponse.get("VALUE");
+                prepareResponse(opportunity);
+                opportunitiesWithAccountDetails.add(opportunityResponse);
+        });
+        System.out.println(opportunitiesWithAccountDetails);
+        return opportunitiesWithAccountDetails;
+    }
+
+    private static void prepareResponse(final Map<String, Object> opportunity) {
+        final Map<String, Object> account = new HashMap<>();
+        account.put("BILLING_COUNTRY", "BILLING_COUNTRY");
+        account.put("REGION", "REGION");
+        opportunity.put("BILLING_COUNTRY", account.get("BILLING_COUNTRY"));
+        opportunity.put("REGION", account.get("REGION"));
+    }
+
+    public static void getStreaming() {
+        ArrayList<String> a = new ArrayList<String>();
+        a.add("test");
+        System.out.println(
+        Stream.of(a.stream(), new ArrayList<String>().stream())
+        .flatMap(identity())
+        .sorted()
+        .collect(toList()));
+    }
+
+    public static boolean finallyTest() {
+        boolean flag = false;
+        System.out.println("before try " + flag);
+        try {
+            flag = true;
+            System.out.println("in try " + flag);
+            return flag;
+        }
+        finally {
+            flag = false;
+            System.out.println("in finally " + flag);
+        }
     }
 
 }
